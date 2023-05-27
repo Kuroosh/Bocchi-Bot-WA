@@ -1,4 +1,4 @@
-async function kickfilter(a, b ,eng) {
+async function kickfilter(a, b, eng) {
     const isRegistered = await a.db.containsId('registered', a.sender.id)
     const isKickfilter = a.isGroupMsg ? await a.db.groupinfoId('kickfilter', a.groupId) : false
     var { getRang } = a.importFresh('../../lib/rang.js')
@@ -7,25 +7,22 @@ async function kickfilter(a, b ,eng) {
     if (!isRegistered) return await b.reply(a.from, eng.notRegistered(), a.id)
     if (!a.isGroupMsg) return await b.reply(a.from, eng.groupOnly(), a.id)
     if (!a.isGroupAdmins && !isLeitung) return await b.reply(a.from, eng.adminOnly(), a.id)
+    var engname = 'Kickfilter'
     if (a.ar[0] === 'enable') {
-        if (isKickfilter) return await b.reply(a.from, eng.KickfilterAlready(), a.id)
+        if (isKickfilter) return await b.reply(a.from, eng.alreadyon(engname), a.id)
         if (!a.isBotGroupAdmins) return await b.reply(a.from, eng.botNotAdmin(), a.id)
         await a.db.setGroupinfoId('kickfilter', a.groupId);
-        await b.reply(a.from, eng.KickfilterOn(), a.id)
+        await b.reply(a.from, eng.on(engname), a.id)
     } else if (a.ar[0] === 'disable') {
-        if (!await a.db.getGroupinfoId('kickfilter', a.groupId)) {
-            await b.reply(a.from, '❌Kickfilter ist bereits aus!❌', a.id)
-        } else {
-            await a.db.unsetGroupinfoId('kickfilter', a.groupId);
-            await b.reply(a.from, eng.KickfilterOff(), a.id)
-        }
+        if (!isKickfilter) return await b.reply(a.from, eng.alreadyoff(engname), a.id)
+        await a.db.unsetGroupinfoId('kickfilter', a.groupId);
+        await b.reply(a.from, eng.off(engname), a.id)
     } else if (a.ar[0] === 'add') {
-        if (!isKickfilter) return await b.reply(a.from, eng.notKickfilter(), a.id)
+        if (!isKickfilter) return await b.reply(a.from, eng.not(engname), a.id)
         if (a.args.length === 1) return b.reply(a.from, `Bitte gib einen Filter an`, a.id)
         if (!a.isGroupAdmins && !isLeitung) return await b.reply(a.from, eng.adminOnly(), a.id)
         if (!a.isBotGroupAdmins) return await b.reply(a.from, eng.botNotAdmin(), a.id)
-        if (a.args[1].startsWith('49') || a.args[1].startsWith(49)) return await b.sendText(a.from, `Du darfst 49* nicht auf die Liste packen. Danke`)
-                try {
+        try {
             if (a.ar[1].length !== 0) {
                 for (let filter of a.ar[1].split(',')) {
                     let filterTrim = filter.trim()
@@ -52,7 +49,7 @@ async function kickfilter(a, b ,eng) {
         }
     } else if (a.ar[0] === 'remove') {
         if (!a.isGroupAdmins && !isLeitung) return await b.reply(a.from, eng.adminOnly(), a.id)
-        if (!isKickfilter) return await b.reply(a.from, eng.notKickfilter(), a.id)
+        if (!isKickfilter) return await b.reply(a.from, eng.not(engname), a.id)
         try {
             if (a.ar[1].length !== 0) {
                 for (let filter of a.ar[1].split(',')) {
@@ -74,7 +71,16 @@ async function kickfilter(a, b ,eng) {
         await b.reply(a.from, `Verwendung:\n${a.prefix}kickfilter\n_Zeigt Verwendung_\n\n${a.prefix}kickfilter enable zum aktivieren\n${a.prefix}kickfilter disable zum deaktivieren\n\n${a.prefix}kickfilter check\n_Zeigt Aktuelle Filter an._\n\n${a.prefix}kickfilter add/remove\n_Fügt bzw. entfernt Filter_`, a.id)
     }
 }
+const helpobj = {
+    'command': `kickfilter`,
+    'categorie': 'Moderation',
+    'alias': ['no alias'], //diese aliase müssen unten angegeben werden: passwd, pw: passwd usw
+    'usage': `kickfilter`,
+    'permission': 'foruser',
+    'description': 'Ruft eine Vollständige Erklärung von Kickfilter auf.'
+};
 
 module.exports = {
-    kickfilter
+    kickfilter,
+    helpobj
 }

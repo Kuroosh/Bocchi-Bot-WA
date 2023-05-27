@@ -9,29 +9,29 @@ async function antilink(a, b, eng) {
     if (!a.isGroupMsg) return await b.reply(a.from, eng.groupOnly(), a.id)
     if (!a.isGroupAdmins && !isLeitung) return await b.reply(a.from, eng.adminOnly(), a.id)
     if (!a.isBotGroupAdmins) return await b.reply(a.from, eng.botNotAdmin(), a.id)
+    var engname = 'Antilink'
     if (a.ar[0] === 'enable') {
-        if (isDetectorOnLINK) return await b.reply(a.from, 'Antilink bereits aktiviert!', a.id)
+        if (isDetectorOnLINK) return await b.reply(a.from, eng.alreadyon(engname), a.id)
         await a.db.setGroupinfoId('antilink', a.groupId);
-/*
-        const dataJson = await a.db.getFromAll('groupinfo')//JSON.parse(data)
-        for (let i = 0; i < dataJson.length; i++) {
-        await b.sendText(a.from, JSON.stringify(dataJson[i]))
-        console.log(dataJson[i])
-        }
-        */
-        await b.reply(a.from, eng.detectorOnLINK(), a.id)
+        await b.reply(a.from, eng.on(engname), a.id)
     } else if (a.ar[0] === 'disable') {
-        if (!await a.db.getGroupinfoId('antilink', a.groupId)) {
-            await b.reply(a.from, '❌ANTI-LINK ist bereits aus!❌', a.id)
-        } else {
-            await a.db.unsetGroupinfoId('antilink', a.groupId);
-            await b.reply(a.from, eng.detectorOffLINK(), a.id)
-        }
+        if (!isDetectorOnLINK) return await b.reply(a.from, eng.alreadyoff(engname), a.id)
+        await a.db.unsetGroupinfoId('antilink', a.groupId);
+        await b.reply(a.from, eng.off(engname), a.id)
     } else {
-        await b.reply(a.from, `Verwendung:\n/antilink\n_Zeigt Verwendung_\n\n/antilink enable zum aktivieren\n/antilink disable zum deaktivieren\n`, a.id)
+        await b.reply(a.from, `Verwende ${a.prefix}help antilink um die Vollständige Verwendung zu sehen.`, a.id)
     }
 }
+const helpobj = {
+    'command': `antilink`,
+    'categorie': 'Moderation',
+    'alias': ['no alias'], //diese aliase müssen unten angegeben werden: passwd, pw: passwd usw
+    'usage': `antilink _enable_ / _disable_`,
+    'permission': 'foruser',
+    'description': 'Schaltet die Funktion antilink an oder aus -> rufe aktuellen Status mit /gi ab\n_Diese Funktion kickt bei Gruppenwerbung automatisch aus der Gruppe._'
+};
 
 module.exports = {
-    antilink
+    antilink,
+    helpobj
 }

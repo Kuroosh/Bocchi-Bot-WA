@@ -21,35 +21,17 @@ async function promote(a, b, eng) {
     await b.promoteParticipant(a.groupId, promoteId)
     await b.reply(a.from, `Der genannte User ist nun ein Admin!`, a.id)
 }
-
-async function promoteme(a, b, eng) {
-    var { getRang } = a.importFresh('../../lib/rang.js')
-    var isLeitung = await getRang('isLeitung', a.sender.id, a.db)
-
-    if (!isLeitung) return await b.reply(a.from, eng.leitungOnly(), a.id)
-    var promotemeid = a.sender.id
-    var promotemegroupid = a.args[0]
-    await b.promoteParticipant(promotemegroupid, promotemeid)
-    await b.reply(a.from, `Du bist nun ein Admin in dieser Gruppe!`, a.id)
-
-}
-async function selfpromote(a, b, eng) {
-    var { getRang } = a.importFresh('../../lib/rang.js')
-    var isLeitung = await getRang('isLeitung', a.sender.id, a.db)
-    // var isGroupOwner = a.chat.groupMetadata.owner ? a.sender.id : false
-
-
-    if (!a.isGroupMsg) return await b.reply(a.from, eng.groupOnly(), a.id)
-    if (!isLeitung /* && !isGroupOwner */) return await b.reply(a.from, eng.GroupCreatorOnly(), a.id)
-    if (!a.isBotGroupAdmins) return await b.reply(a.from, eng.botNotAdmin(), a.id)
-    if (a.groupAdmins.includes(a.sender.id)) return await b.reply(a.from, `Du bist bereits ein Admin`, a.id)
-    await b.promoteParticipant(a.groupId, a.sender.id)
-    await b.reply(a.from, `Du hast dich selbst zu einem Admin ernannt!`, a.id)
-
-}
+const helpobj = {
+    'command': `promote`,
+    'categorie': 'Moderation',
+    'alias': ['no alias'], //diese aliase müssen unten angegeben werden: passwd, pw: passwd usw
+    'usage': `promote _@Nummer_`,
+    'permission': 'foruser',
+    'description': 'Ernennt eine neue Person zum Administrator.'
+};
 
 module.exports = {
     promote,
-    promoteme,
-    selfpromote
+    helpobj,
 }
+

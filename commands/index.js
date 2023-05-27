@@ -4,56 +4,50 @@ const importFresh = require('import-fresh');
 let allOfThem = {};
 
 // Get all Commands
-glob.sync(`${__dirname}/Bot/*.js`).forEach((file) => {
+
+glob.sync(`${__dirname}/allcmds/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Downloader/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/bot/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Fun/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/downloader/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Gaming/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/fun/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Leveling/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/gaming/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Misc/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/leveling/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Moderation/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/moderation/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/NSFW/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/nsfw/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Owner/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/premium/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Ohne/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/team/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Premium/*.js`).forEach((file) => {
+glob.sync(`${__dirname}/sticker/*.js`).forEach((file) => {
     allOfThem = { ...allOfThem, ...importFresh(file) };
 });
 
-glob.sync(`${__dirname}/Sticker/*.js`).forEach((file) => {
-    allOfThem = { ...allOfThem, ...importFresh(file) };
-});
-
-glob.sync(`${__dirname}/Weeaboo/*.js`).forEach((file) => {
-    allOfThem = { ...allOfThem, ...importFresh(file) };
-});
 
 module.exports = allOfThem;

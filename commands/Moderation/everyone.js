@@ -8,7 +8,8 @@ async function everyone(a, b, eng) {
     if (!isRegistered) return await b.reply(a.from, eng.notRegistered(), a.id)
     if (!a.isGroupMsg) return await b.reply(a.from, eng.groupOnly(), a.id)
     if (!a.isGroupAdmins && !isLeitung) return await b.reply(a.from, eng.adminOnly(), a.id)
-    if (isEveryoneOn) return await b.reply(a.from, eng.EveryoneOnAlready(), a.id)
+    var engname = 'All'
+    if (isEveryoneOn) return await b.reply(a.from, eng.not(engname), a.id)
     const groupMem = await b.getGroupMembers(a.groupId)
     if (isTeam) {
         cd = 3600000
@@ -48,23 +49,15 @@ async function everyone(a, b, eng) {
         }
     }
 }
-async function oeveryone(a, b, eng) {
-    var { getRang } = a.importFresh('../../lib/rang.js')
-    var isOwner = await getRang('isOwner', a.sender.id, a.db)
-    const groupMemo = await b.getGroupMembers(a.groupId)
-    if (isOwner) {
-        let txto = `╔══✪〘 *EVERYONE* 〙✪══╗\n\n${a.q.replace('+', '')}\n\n`
-        for (let i = 0; i < groupMemo.length; i++) {
-            txto += ` @${groupMemo[i].id.replace(/@c.us/g, '')}`
-        }
-        txto += '\n╚══✪〘 *B O C C H I* 〙✪══╝'
-        await b.sendTextWithMentions(a.from, txto, true)
-    } else {
-        await b.sendText(a.from, 'Nö')
-    }
-}
-
+const helpobj = {
+    'command': `everyone`,
+    'categorie': 'Moderation',
+    'alias': ['no alias'], //diese aliase müssen unten angegeben werden: passwd, pw: passwd usw
+    'usage': `everyone _dein text_`,
+    'permission': 'foruser',
+    'description': 'Sendet eine Nachricht wo alle Leute in der gruppe Markiert sind und Schreibt darüber deinen Text.'
+};
 module.exports = {
     everyone,
-    oeveryone,
+    helpobj
 }

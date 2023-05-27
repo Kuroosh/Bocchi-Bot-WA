@@ -1,8 +1,8 @@
-async function betz(a, b ,eng) {
-    // const isRegistered = await a.db.containsId('registered', a.sender.id)
-    // if (!isRegistered) return await b.reply(a.from, eng.notRegistered(), a.id)
+async function betz(a, b, eng) {
+    const isRegistered = await a.db.containsId('registered', a.sender.id)
+    if (!isRegistered) return await b.reply(a.from, eng.notRegistered(), a.id)
     var betz1 = a.ar[0]
-    var betz2 = Math.floor(Math.random() * 49) 
+    var betz2 = Math.floor(Math.random() * 49) + 1
     if (betz1 > 50) return await b.sendText(a.from, 'Bitte nimm eine Zahl zwischen 1 und 50')
     if (isNaN(betz1) == true) { // isNaN überprüft ob es eine zahl ist! true ist keine Zahl
         await b.reply(a.from, `Dies ist keine Zahl`, a.id)
@@ -19,7 +19,16 @@ async function betz(a, b ,eng) {
     }
 
 }
+const helpobj = {
+    'command': `betz`,
+    'categorie': 'Gaming',
+    'alias': ['no alias'], //diese aliase müssen unten angegeben werden: passwd, pw: passwd usw
+    'usage': `betz _zahl_`,
+    'permission': 'foruser',
+    'description': 'Bot guvkt wie nah deine Zahl an der zufälligen liegt'
+};
 
 module.exports = {
-    betz
-} 
+    betz,
+    helpobj
+}

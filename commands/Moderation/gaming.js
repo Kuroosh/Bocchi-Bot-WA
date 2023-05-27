@@ -8,21 +8,28 @@ async function gaming(a, b, eng) {
     if (!isRegistered) return await b.reply(a.from, eng.notRegistered(), a.id)
     if (!a.isGroupMsg) return await b.reply(a.from, eng.groupOnly(), a.id)
     if (!a.isGroupAdmins && !isLeitung) return await b.reply(a.from, eng.adminOnly(), a.id)
+    var engname = 'Gaming'
     if (a.ar[0] === 'enable') {
-        if (isGaming) return await b.reply(a.from, eng.GamingAlready(), a.id)
+        if (isGaming) return await b.reply(a.from, eng.alreadyon(engname), a.id)
         await a.db.setGroupinfoId('gaming', a.groupId);
-        await b.reply(a.from, eng.GamingOn(), a.id)
+        await b.reply(a.from, eng.on(engname), a.id)
     } else if (a.ar[0] === 'disable') {
-        if (!await a.db.getGroupinfoId('gaming', a.groupId)) {
-            await b.reply(a.from, 'Gaming ist bereits aus!❌', a.id)
-        } else {
-            await a.db.unsetGroupinfoId('gaming', a.groupId);
-            await b.reply(a.from, eng.GamingOff(), a.id)
-        }
+        if (!isGaming) return await b.reply(a.from, eng.alreadyoff(engname), a.id)
+        await a.db.unsetGroupinfoId('gaming', a.groupId);
+        await b.reply(a.from, eng.off(engname), a.id)
     } else {
-        await b.reply(a.from, `Verwendung:\n${a.prefix}gaming\n_Zeigt Verwendung_\n\n${a.prefix}gaming enable zum aktivieren\n${a.prefix}gaming disable zum deaktivieren\n`, a.id)
+        await b.reply(a.from, `Verwende ${a.prefix}help gaming um die Verwendung zu sehen.`, a.id)
     }
-    
-} module.exports = {
-gaming
+}
+const helpobj = {
+    'command': `gaming`,
+    'categorie': 'Moderation',
+    'alias': ['no alias'], //diese aliase müssen unten angegeben werden: passwd, pw: passwd usw
+    'usage': `gaming _enable_ / _disable_`,
+    'permission': 'foruser',
+    'description': 'Schaltet die Funktion gaming an oder aus -> rufe aktuellen Status mit /gi ab'
+};
+module.exports = {
+    gaming,
+    helpobj
 }

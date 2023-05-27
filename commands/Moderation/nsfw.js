@@ -9,20 +9,30 @@ async function nsfw(a, b, eng) {
     if (!isRegistered) return await b.reply(a.from, eng.notRegistered(), a.id)
     if (!a.isGroupMsg) return await b.reply(a.from, eng.groupOnly(), a.id)
     if (!a.isGroupAdmins && !isLeitung) return await b.reply(a.from, eng.adminOnly(), a.id)
+    var engname = 'NSFW'
     if (a.ar[0] === 'enable') {
-        if (isNsfw) return await b.reply(a.from, eng.nsfwAlready(), a.id)
+        if (isNsfw) return await b.reply(a.from, eng.alreadyon(engname), a.id)
         await a.db.setGroupinfoId('nsfw', a.groupId);
-        await b.reply(a.from, eng.nsfwOn(), a.id)
+        await b.reply(a.from, eng.on(engname), a.id)
     } else if (a.ar[0] === 'disable') {
-        if (!await a.db.getGroupinfoId('nsfw', a.groupId)) {
-            await b.reply(a.from, '❌NSFW ist bereits aus!❌', a.id)
-        } else {
-            await a.db.unsetGroupinfoId('nsfw', a.groupId);
-            await b.reply(a.from, eng.nsfwOff(), a.id)
-        }
+        if (!isNsfw) return await b.reply(a.from, eng.alreadyoff(engname), a.id)
+        await a.db.unsetGroupinfoId('nsfw', a.groupId);
+        await b.reply(a.from, eng.off(engname), a.id)
     } else {
         await b.reply(a.from, `Verwendung:\n${a.prefix}nsfw\n_Zeigt Verwendung_\n\n${a.prefix}nsfw enable zum aktivieren\n${a.prefix}nsfw disable zum deaktivieren\n`, a.id)
     }
-} module.exports = {
-    nsfw
+
+}
+const helpobj = {
+    'command': `nsfw`,
+    'categorie': 'Moderation',
+    'alias': ['no alias'], //diese aliase müssen unten angegeben werden: passwd, pw: passwd usw
+    'usage': `nsfw _enable_ / _disable_`,
+    'permission': 'foruser',
+    'description': 'Schaltet die Funktion NSFW an oder aus -> rufe aktuellen Status mit /gi ab'
+};
+
+module.exports = {
+    nsfw,
+    helpobj
 }
